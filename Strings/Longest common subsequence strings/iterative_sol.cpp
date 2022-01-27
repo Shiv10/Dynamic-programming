@@ -20,3 +20,7 @@ int lcs(string s, string t)
     int ans = memo[n][m];
     return ans;
 }
+
+int main() {
+    
+}
