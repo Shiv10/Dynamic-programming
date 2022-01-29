@@ -1,28 +1,41 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int minJumps(vector<int> &arr, int n, int curr, int jumps, vector<int> &memo){
-    if(curr>=n-1) return jumps;
-
-    if(memo[curr]!=-1) return memo[curr];
-
-    int i, m=-1, temp;
-    for(i=1;i<=arr[curr];i++){
-        temp = minJumps(arr, n, curr+i, jumps+1, memo);
-        if(m==-1 || m>temp) m = temp;
+int calcMin(vector<int> &arr, int ci, int n, vector<int> &memo) {
+    
+    if(ci>=n-1) return 0;
+    
+    if(memo[ci]!=-1) return memo[ci];
+    
+    int m = INT_MAX;
+    
+    for(int i = 1; i <= arr[ci]; i++) {
+        int temp = calcMin(arr,ci+i, n, memo);
+        if (temp==INT_MAX) continue;
+        m = min(1+temp, m);
     }
-    memo[curr] = n-m;
+    
+    if(m==INT_MAX) {
+        memo[ci] = -1;
+    } else {
+        memo[ci] = m;
+    }
     return m;
 }
+    
+int minJumps(int arr[], int n){
+    // Your code here
+    vector<int> dest(arr, arr+n);
+    int m;
+    vector<int> memo(n, -1);
+    memo[n-1] = 0;
+    m = calcMin(dest, 0, n, memo);
+    return memo[0];
+}
+
 
 int main(){
-    vector<int> arr;
-    arr.push_back(1);
-    arr.push_back(0);
-    arr.push_back(3);
-    arr.push_back(2);
-    arr.push_back(1);
-    vector<int> memo(arr.size(), -1);
-    int a = minJumps(arr, arr.size(), 0, 0, memo);
+    int arr[]= {1,2,3,4};
+    int a = minJumps(arr, 4);
     cout<<a;
 }
